@@ -1,0 +1,40 @@
+# Source files
+src/
+__tests__/
+test/
+tests/
+*.test.ts
+*.spec.ts
+
+# Development files
+.git/
+.gitignore
+.github/
+.vscode/
+.idea/
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+
+# Build and config files
+tsconfig.json
+vitest.config.ts
+.eslintrc*
+.prettierrc*
+.editorconfig
+*.config.js
+*.config.ts
+
+# Dependencies
+node_modules/
+yarn.lock
+package-lock.json
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Keep only the built files
+!dist/ 
