@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["vitest/globals", "node", "axios-mock-adapter"],
+    "types": ["vitest/globals", "node"],
     "skipLibCheck": true
   },
   "include": ["src/**/*.test.ts", "src/**/*.spec.ts"],

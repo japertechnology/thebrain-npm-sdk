@@ -17,7 +17,6 @@ describe('Links API E2E', () => {
         // Create a test brain
         const brain = await helper.createTestBrain('Test Brain Links E2E');
         testBrainId = brain.id!;
-        console.log('Created test brain:', testBrainId);
 
         // Create source thought
         const sourceThought = await api.thoughts.createThought(testBrainId, {
@@ -25,7 +24,6 @@ describe('Links API E2E', () => {
             kind: ThoughtKind.Normal
         } as ThoughtCreateModel);
         sourceThoughtId = sourceThought.id!;
-        console.log('Created source thought:', sourceThoughtId);
 
         // Create target thought
         const targetThought = await api.thoughts.createThought(testBrainId, {
@@ -33,7 +31,6 @@ describe('Links API E2E', () => {
             kind: ThoughtKind.Normal
         } as ThoughtCreateModel);
         targetThoughtId = targetThought.id!;
-        console.log('Created target thought:', targetThoughtId);
     });
 
     afterAll(async () => {
@@ -44,7 +41,6 @@ describe('Links API E2E', () => {
         let createdLinkId: string;
 
         it('should create a link between thoughts', async () => {
-            console.log('Creating link between thoughts...');
             const link = await api.links.createLink(testBrainId, {
                 thoughtIdA: sourceThoughtId,
                 thoughtIdB: targetThoughtId,
@@ -88,7 +84,6 @@ describe('Links API E2E', () => {
             });
 
             // Wait for update to propagate
-            console.log('Waiting for link update to propagate...');
             await new Promise(res => setTimeout(res, 2000));
 
             // Retry loop for eventual consistency
@@ -99,28 +94,23 @@ describe('Links API E2E', () => {
             while (attempts < maxAttempts) {
                 // Verify the update
                 updatedLink = await api.links.getLink(testBrainId, createdLinkId);
-                console.log(`Attempt ${attempts + 1}/${maxAttempts} - Retrieved link:`, updatedLink);
                 
                 if (updatedLink.name === 'Updated Link Name') {
-                    console.log('Link name updated successfully');
                     break;
                 }
                 
                 attempts++;
                 if (attempts < maxAttempts) {
-                    console.log(`Waiting 1000ms before next attempt...`);
                     await new Promise(res => setTimeout(res, 1000));
                 }
             }
 
-            expect(updatedLink.name).toBe('Updated Link Name');
-            expect(updatedLink.relation).toBe(1); // Child = 1
+            expect(updatedLink!.name).toBe('Updated Link Name');
+            expect(updatedLink!.relation).toBe(1); // Child = 1
         }, 30000);
 
         it('should get link attachments', async () => {
-            console.log('Getting link attachments...');
             const attachments = await api.links.getLinkAttachments(testBrainId, createdLinkId);
-            console.log('Retrieved attachments:', attachments);
 
             expect(Array.isArray(attachments)).toBe(true);
             // Initially there should be no attachments
@@ -176,11 +166,9 @@ describe('Links API E2E', () => {
         });
 
         it('should delete the link', async () => {
-            console.log('Deleting link...');
             await api.links.deleteLink(testBrainId, createdLinkId);
             
             // Wait for deletion to propagate
-            console.log('Waiting for link deletion to propagate...');
             await new Promise(res => setTimeout(res, 2000));
             
             // Retry logic with eventual consistency
@@ -190,11 +178,8 @@ describe('Links API E2E', () => {
             
             while (attempts < maxAttempts) {
                 try {
-                    console.log(`Attempt ${attempts + 1}/${maxAttempts} to verify link deletion`);
                     await api.links.getLink(testBrainId, createdLinkId);
-                    console.log('Link still exists, waiting for deletion to propagate...');
                 } catch (err: any) {
-                    console.log('Link deletion confirmed!');
                     deletionConfirmed = true;
                     if (err.response) {
                         expect(err.response.status).toBeGreaterThanOrEqual(400);
@@ -206,7 +191,6 @@ describe('Links API E2E', () => {
                 
                 attempts++;
                 if (attempts < maxAttempts) {
-                    console.log(`Waiting 1000ms before next attempt...`);
                     await new Promise(res => setTimeout(res, 1000));
                 }
             }

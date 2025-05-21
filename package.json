@@ -1,6 +1,6 @@
 {
   "name": "thebrain-api",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "TypeScript client for TheBrain API",
   "type": "module",
   "main": "dist/index.js",
@@ -41,7 +41,6 @@
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@types/axios-mock-adapter": "^1.10.4",
     "@types/bunyan": "^1.8.11",
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^7.0.1",

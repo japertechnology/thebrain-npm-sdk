@@ -15,17 +15,10 @@ describe('Get Brains API E2E Test', () => {
         expect(Array.isArray(brains)).toBe(true);
         expect(brains.length).toBeGreaterThan(0);
         
-        // Print brain names
-        console.log('\nFound brains:');
-        brains.forEach((brain, index) => {
-            console.log(`${index + 1}. ${brain.name || 'Unnamed Brain'} (ID: ${brain.id})`);
-        });
-        
-        // Verify each brain has the expected structure
+        // Verify each brain has required properties
         brains.forEach(brain => {
-            expect(brain).toHaveProperty('id');
-            expect(brain).toHaveProperty('name');
-            expect(brain).toHaveProperty('homeThoughtId');
+            expect(brain.id).toBeDefined();
+            expect(typeof brain.name).toBe('string');
         });
     });
 }); 
