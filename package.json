@@ -29,7 +29,7 @@
     "client",
     "typescript"
   ],
-  "author": "",
+  "author": "Jalal",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.7",
@@ -62,11 +62,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/thebrain-api.git"
+    "url": "git+https://github.com/jalal/thebrain-api.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/thebrain-api/issues"
+    "url": "https://github.com/jalal/thebrain-api/issues"
   },
-  "homepage": "https://github.com/yourusername/thebrain-api#readme",
+  "homepage": "https://github.com/jalal/thebrain-api#readme",
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }
