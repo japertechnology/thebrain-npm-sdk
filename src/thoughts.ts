@@ -27,7 +27,12 @@ export class ThoughtsApi {
     }
 
     async updateThought(brainId: string, thoughtId: string, operations: ThoughtDtoJsonPatchDocument): Promise<void> {
-        await this.axiosInstance.patch(`/thoughts/${brainId}/${thoughtId}`, operations);
+        const operationsArray = Array.isArray(operations) ? operations : operations.operations;
+        await this.axiosInstance.patch(`/thoughts/${brainId}/${thoughtId}`, operationsArray, {
+            headers: {
+                'Content-Type': 'application/json-patch+json'
+            }
+        });
     }
 
     async deleteThought(brainId: string, thoughtId: string): Promise<void> {

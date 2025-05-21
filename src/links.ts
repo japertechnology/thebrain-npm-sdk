@@ -20,7 +20,12 @@ export class LinksApi {
     }
 
     async updateLink(brainId: string, linkId: string, operations: LinkDtoJsonPatchDocument): Promise<void> {
-        await this.axiosInstance.patch(`/links/${brainId}/${linkId}`, operations);
+        const operationsArray = Array.isArray(operations) ? operations : operations.operations;
+        await this.axiosInstance.patch(`/links/${brainId}/${linkId}`, operationsArray, {
+            headers: {
+                'Content-Type': 'application/json-patch+json'
+            }
+        });
     }
 
     async deleteLink(brainId: string, linkId: string): Promise<void> {

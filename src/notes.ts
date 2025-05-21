@@ -7,24 +7,24 @@ export class NotesApi {
     /**
      * Get a thought's note content as Markdown
      */
-    async getNoteMarkdown(brainId: string, thoughtId: string): Promise<string> {
-        const response = await this.axios.get<string>(`/notes/${brainId}/${thoughtId}/markdown`);
+    async getNoteMarkdown(brainId: string, thoughtId: string): Promise<NotesDto> {
+        const response = await this.axios.get<NotesDto>(`/notes/${brainId}/${thoughtId}`);
         return response.data;
     }
 
     /**
      * Get a thought's note content as HTML
      */
-    async getNoteHtml(brainId: string, thoughtId: string): Promise<string> {
-        const response = await this.axios.get<string>(`/notes/${brainId}/${thoughtId}/html`);
+    async getNoteHtml(brainId: string, thoughtId: string): Promise<NotesDto> {
+        const response = await this.axios.get<NotesDto>(`/notes/${brainId}/${thoughtId}/html`);
         return response.data;
     }
 
     /**
      * Get a thought's note content as plain text
      */
-    async getNoteText(brainId: string, thoughtId: string): Promise<string> {
-        const response = await this.axios.get<string>(`/notes/${brainId}/${thoughtId}/text`);
+    async getNoteText(brainId: string, thoughtId: string): Promise<NotesDto> {
+        const response = await this.axios.get<NotesDto>(`/notes/${brainId}/${thoughtId}/text`);
         return response.data;
     }
 
@@ -40,7 +40,8 @@ export class NotesApi {
      * Append content to a thought's note
      */
     async appendToNote(brainId: string, thoughtId: string, content: string): Promise<NotesDto> {
-        const response = await this.axios.post<NotesDto>(`/notes/${brainId}/${thoughtId}/append`, { content });
+        const updateModel: NotesUpdateModel = { markdown: content };
+        const response = await this.axios.post<NotesDto>(`/notes/${brainId}/${thoughtId}/append`, updateModel);
         return response.data;
     }
 } 

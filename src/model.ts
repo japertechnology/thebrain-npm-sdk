@@ -205,22 +205,28 @@ const BaseOperationSchema = z.object({
     operationType: OperationTypeSchema,
     path: z.string().nullable(),
     op: z.string().nullable(),
-    from: z.string().nullable(),
+    from: z.string().nullable().optional(),
     value: z.any().nullable(),
 });
 
 export const ThoughtDtoOperation = BaseOperationSchema;
 export const LinkDtoOperation = BaseOperationSchema;
 
-export const ThoughtDtoJsonPatchDocument = z.object({
-    operations: z.array(ThoughtDtoOperation).nullable(),
-    contractResolver: z.any(),
-});
+export const ThoughtDtoJsonPatchDocument = z.union([
+    z.array(ThoughtDtoOperation),
+    z.object({
+        operations: z.array(ThoughtDtoOperation).nullable(),
+        contractResolver: z.any(),
+    })
+]);
 
-export const LinkDtoJsonPatchDocument = z.object({
-    operations: z.array(LinkDtoOperation).nullable(),
-    contractResolver: z.any(),
-});
+export const LinkDtoJsonPatchDocument = z.union([
+    z.array(LinkDtoOperation),
+    z.object({
+        operations: z.array(LinkDtoOperation).nullable(),
+        contractResolver: z.any(),
+    })
+]);
 
 // Graph Models
 export const ThoughtGraphDto = z.object({

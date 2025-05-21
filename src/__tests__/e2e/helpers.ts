@@ -69,6 +69,5 @@ export class TestHelper {
             }
         }
         this.testBrains = [];
-        this.api_instance = undefined;
     }
 } 

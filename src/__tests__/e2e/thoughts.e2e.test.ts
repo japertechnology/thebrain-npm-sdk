@@ -30,7 +30,7 @@ describe('Thoughts API E2E', () => {
         await helper.cleanup();
     });
 
-    describe('Create and Retrieve Thoughts', () => {
+    describe('CRUD Thoughts', () => {
         it('should create a new thought', async () => {
             const response = await api.thoughts.createThought(testBrainId, {
                 name: 'New Test Thought',
@@ -52,9 +52,6 @@ describe('Thoughts API E2E', () => {
             expect(thought.id).toBe(testThoughtId);
             expect(thought.name).toBe('Test Thought');
         });
-    });
-
-    describe('Update and Delete Thoughts', () => {
         it('should update a thought', async () => {
             await api.thoughts.updateThought(testBrainId, testThoughtId, {
                 operations: [
@@ -62,13 +59,12 @@ describe('Thoughts API E2E', () => {
                         path: '/name',
                         operationType: OperationType.Replace,
                         op: 'replace',
-                        from: null,
+                        from: 'Test Thought',
                         value: 'Updated Test Thought'
                     }
                 ]
             });
             
-            // Verify the thought was updated by retrieving it
             const updatedThought = await api.thoughts.getThought(testBrainId, testThoughtId);
             expect(updatedThought).toBeDefined();
             expect(updatedThought.id).toBe(testThoughtId);
@@ -91,6 +87,7 @@ describe('Thoughts API E2E', () => {
             expect(errorMsg).toBe('');
         });
     });
+
 
     describe('Error Handling', () => {
         it('should handle invalid brain ID', async () => {

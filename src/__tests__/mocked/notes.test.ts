@@ -30,11 +30,11 @@ describe('NotesApi', () => {
 
     describe('getNoteMarkdown', () => {
         it('should get note content as markdown', async () => {
-            mock.onGet(`/notes/${mockBrainId}/${mockThoughtId}/markdown`)
-                .reply(200, mockNote.markdown);
+            mock.onGet(`/notes/${mockBrainId}/${mockThoughtId}`)
+                .reply(200, mockNote);
 
             const result = await api.getNoteMarkdown(mockBrainId, mockThoughtId);
-            expect(result).toBe(mockNote.markdown);
+            expect(result).toEqual(mockNote);
         });
 
         it('should throw error on invalid parameters', async () => {
@@ -50,10 +50,10 @@ describe('NotesApi', () => {
     describe('getNoteHtml', () => {
         it('should get note content as HTML', async () => {
             mock.onGet(`/notes/${mockBrainId}/${mockThoughtId}/html`)
-                .reply(200, mockNote.html);
+                .reply(200, mockNote);
 
             const result = await api.getNoteHtml(mockBrainId, mockThoughtId);
-            expect(result).toBe(mockNote.html);
+            expect(result).toEqual(mockNote);
         });
 
         it('should throw error on invalid parameters', async () => {
@@ -69,10 +69,10 @@ describe('NotesApi', () => {
     describe('getNoteText', () => {
         it('should get note content as plain text', async () => {
             mock.onGet(`/notes/${mockBrainId}/${mockThoughtId}/text`)
-                .reply(200, mockNote.text);
+                .reply(200, mockNote);
 
             const result = await api.getNoteText(mockBrainId, mockThoughtId);
-            expect(result).toBe(mockNote.text);
+            expect(result).toEqual(mockNote);
         });
 
         it('should throw error on invalid parameters', async () => {
@@ -118,6 +118,7 @@ describe('NotesApi', () => {
         it('should append content to a note', async () => {
             const contentToAppend = '\n\nAppended content.';
             const expectedMarkdown = mockNote.markdown + contentToAppend;
+            const updateModel: NotesUpdateModel = { markdown: contentToAppend };
 
             mock.onPost(`/notes/${mockBrainId}/${mockThoughtId}/append`)
                 .reply(200, {
