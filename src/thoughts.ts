@@ -27,7 +27,11 @@ export class ThoughtsApi {
     }
 
     async updateThought(brainId: string, thoughtId: string, operations: ThoughtDtoJsonPatchDocument): Promise<void> {
-        const operationsArray = Array.isArray(operations) ? operations : operations.operations;
+        const operationsArray = Array.isArray(operations) ? operations : operations?.operations;
+        if (!Array.isArray(operationsArray) || operationsArray.length === 0) {
+            throw new Error('Operations array is required and cannot be empty');
+        }
+
         await this.axiosInstance.patch(`/thoughts/${brainId}/${thoughtId}`, operationsArray, {
             headers: {
                 'Content-Type': 'application/json-patch+json'

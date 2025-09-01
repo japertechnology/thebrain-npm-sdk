@@ -20,7 +20,11 @@ export class LinksApi {
     }
 
     async updateLink(brainId: string, linkId: string, operations: LinkDtoJsonPatchDocument): Promise<void> {
-        const operationsArray = Array.isArray(operations) ? operations : operations.operations;
+        const operationsArray = Array.isArray(operations) ? operations : operations?.operations;
+        if (!Array.isArray(operationsArray) || operationsArray.length === 0) {
+            throw new Error('Operations array is required and cannot be empty');
+        }
+
         await this.axiosInstance.patch(`/links/${brainId}/${linkId}`, operationsArray, {
             headers: {
                 'Content-Type': 'application/json-patch+json'

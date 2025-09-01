@@ -78,6 +78,18 @@ describe('ThoughtsApi', () => {
                 .toThrow();
         });
 
+        it('should throw error when operations are undefined', async () => {
+            await expect(api.updateThought(mockBrainId, mockThoughtId, undefined as any))
+                .rejects
+                .toThrow('Operations array is required and cannot be empty');
+        });
+
+        it('should throw error when operations array is empty', async () => {
+            await expect(api.updateThought(mockBrainId, mockThoughtId, [] as any))
+                .rejects
+                .toThrow('Operations array is required and cannot be empty');
+        });
+
         it('should throw error on invalid parameters', async () => {
             const invalidBrainId = 'invalid-uuid';
             const invalidThoughtId = 'invalid-uuid';

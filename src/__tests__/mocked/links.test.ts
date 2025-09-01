@@ -148,6 +148,18 @@ describe('LinksApi', () => {
                 .toThrow();
         });
 
+        it('should throw error when operations are undefined', async () => {
+            await expect(api.updateLink(mockBrainId, mockLinkId, undefined as any))
+                .rejects
+                .toThrow('Operations array is required and cannot be empty');
+        });
+
+        it('should throw error when operations array is empty', async () => {
+            await expect(api.updateLink(mockBrainId, mockLinkId, [] as any))
+                .rejects
+                .toThrow('Operations array is required and cannot be empty');
+        });
+
         it('should throw error on invalid parameters', async () => {
             const invalidBrainId = 'invalid-uuid';
             const invalidLinkId = 'invalid-uuid';
