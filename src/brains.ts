@@ -69,11 +69,7 @@ export class BrainsApi {
     async createBrain(brainName: string): Promise<BrainDto[]> {
         const formData = new FormData();
         formData.append('brainName', brainName);
-        const { data } = await this.axios.post<BrainDto[]>('/brains', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const { data } = await this.axios.post<BrainDto[]>('/brains', formData);
         return data;
     }
 
