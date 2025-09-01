@@ -45,15 +45,18 @@ const logger = bunyan.createLogger({
 
 // Helper function to sanitize sensitive headers
 function sanitizeHeaders(headers: Record<string, any> = {}) {
-    const sanitized = { ...headers };
+    const sanitized: Record<string, any> = {};
     const sensitiveHeaders = ['authorization', 'cookie', 'set-cookie'];
-    
-    sensitiveHeaders.forEach(header => {
-        if (sanitized[header]) {
+
+    Object.keys(headers).forEach(header => {
+        const lowerHeader = header.toLowerCase();
+        if (sensitiveHeaders.includes(lowerHeader)) {
             sanitized[header] = '[REDACTED]';
+        } else {
+            sanitized[header] = headers[header];
         }
     });
-    
+
     return sanitized;
 }
 
