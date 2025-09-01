@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import logger from '../logger';
+import { TheBrainApi } from '../index';
 
 describe('sanitizeHeaders', () => {
     it('redacts sensitive headers regardless of case', () => {
@@ -16,6 +17,15 @@ describe('sanitizeHeaders', () => {
         expect(serialized.headers.cOoKiE).toBe('[REDACTED]');
         expect(serialized.headers['SeT-CooKiE']).toBe('[REDACTED]');
         expect(serialized.headers['X-Custom']).toBe('value');
+    });
+});
+
+describe('getLogLevel', () => {
+    it('returns the current log level as a string', () => {
+        const api = new TheBrainApi({ apiKey: 'test' } as any);
+        api.setLogLevel('error');
+        expect(api.getLogLevel()).toBe('error');
+        api.setLogLevel('info');
     });
 });
 

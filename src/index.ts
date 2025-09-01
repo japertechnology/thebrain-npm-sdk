@@ -10,6 +10,7 @@ import { SearchApi } from "./search";
 import { UsersApi } from "./users";
 import { ThoughtsApi } from "./thoughts";
 import logger from "./logger";
+import bunyan from "bunyan";
 
 const ConfigSchema = z
     .object({
@@ -149,6 +150,10 @@ export class TheBrainApi {
      * Get the current logging level
      */
     public getLogLevel(): string {
-        return logger.level();
+        const level = logger.level();
+        if (typeof level === 'number') {
+            return bunyan.nameFromLevel[level] ?? level.toString();
+        }
+        return level;
     }
 }
