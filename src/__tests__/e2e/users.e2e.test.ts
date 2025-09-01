@@ -15,8 +15,10 @@ describe('Users API E2E', () => {
     describe('Organization Members', () => {
         it('should get organization members', async () => {
             try {
-                const member = await api.users.getOrganizationMembers();
-                expect(member).toBeDefined();
+                const members = await api.users.getOrganizationMembers();
+                expect(Array.isArray(members)).toBe(true);
+                expect(members.length).toBeGreaterThan(0);
+                const member = members[0];
                 expect(member.id).toBeDefined();
                 expect(typeof member.emailAddress).toBe('string');
             } catch (error: any) {
