@@ -47,13 +47,26 @@ export class NotesImagesApi {
      * @returns A base64 data URL that can be used in an img tag's src attribute
      */
     async getNoteImageAsDataUrl(
-        brainId: string, 
-        token: string, 
+        brainId: string,
+        token: string,
         filename: string,
         mimeType: string
     ): Promise<string> {
         const imageData = await this.getNoteImage(brainId, token, filename);
-        const base64 = Buffer.from(imageData).toString('base64');
+        // Detect environment: use Buffer in Node.js, otherwise use browser APIs
+        let base64: string;
+        if (typeof window === 'undefined') {
+            // Node.js environment
+            base64 = Buffer.from(imageData).toString('base64');
+        } else {
+            // Browser environment
+            const bytes = new Uint8Array(imageData);
+            let binary = '';
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            base64 = btoa(binary);
+        }
         return `data:${mimeType};base64,${base64}`;
     }
 }
