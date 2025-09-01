@@ -146,23 +146,27 @@ describe('AttachmentsApi', () => {
     describe('addUrlAttachment', () => {
         it('should add URL attachment without name', async () => {
             const url = 'https://example.com/test.pdf';
-            mock.onPost(`/attachments/${mockBrainId}/${mockThoughtId}/url`).reply(200);
+            let receivedParams: any;
+            mock.onPost(`/attachments/${mockBrainId}/${mockThoughtId}/url`).reply((config) => {
+                receivedParams = config.params;
+                return [200];
+            });
 
-            await expect(api.addUrlAttachment(mockBrainId, mockThoughtId, url))
-                .resolves
-                .not
-                .toThrow();
+            await api.addUrlAttachment(mockBrainId, mockThoughtId, url);
+            expect(receivedParams).toEqual({ url });
         });
 
         it('should add URL attachment with name', async () => {
             const url = 'https://example.com/test.pdf';
             const name = 'Custom Name';
-            mock.onPost(`/attachments/${mockBrainId}/${mockThoughtId}/url`).reply(200);
+            let receivedParams: any;
+            mock.onPost(`/attachments/${mockBrainId}/${mockThoughtId}/url`).reply((config) => {
+                receivedParams = config.params;
+                return [200];
+            });
 
-            await expect(api.addUrlAttachment(mockBrainId, mockThoughtId, url, name))
-                .resolves
-                .not
-                .toThrow();
+            await api.addUrlAttachment(mockBrainId, mockThoughtId, url, name);
+            expect(receivedParams).toEqual({ url, name });
         });
 
         it('should throw error on invalid parameters', async () => {

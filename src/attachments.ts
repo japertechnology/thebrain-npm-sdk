@@ -31,11 +31,16 @@ export class AttachmentsApi {
     }
 
     async addUrlAttachment(brainId: string, thoughtId: string, url: string, name?: string): Promise<void> {
+        const params: { url?: string; name?: string } = {};
+        if (url !== undefined) {
+            params.url = url;
+        }
+        if (name !== undefined) {
+            params.name = name;
+        }
+
         await this.axiosInstance.post(`/attachments/${brainId}/${thoughtId}/url`, null, {
-            params: {
-                url,
-                name
-            }
+            params
         });
     }
-} 
+}
