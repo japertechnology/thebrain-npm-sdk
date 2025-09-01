@@ -2,10 +2,16 @@ import { AxiosInstance } from "axios";
 import { z } from "zod";
 
 // Schema for note image request parameters
+// Validate token and filename to prevent path traversal
+const safePathSegment = z.string().min(1).refine(
+    (value) => !value.includes("../") && !value.includes("..\\") && !value.includes("/") && !value.includes("\\"),
+    { message: "Invalid path segment" }
+);
+
 const NoteImageRequestSchema = z.object({
     brainId: z.string().uuid(),
-    token: z.string().min(1),
-    filename: z.string().min(1)
+    token: safePathSegment,
+    filename: safePathSegment
 });
 
 export class NotesImagesApi {
@@ -23,7 +29,7 @@ export class NotesImagesApi {
         const params = NoteImageRequestSchema.parse({ brainId, token, filename });
         
         const response = await this.axiosInstance.get(
-            `/notes-images/${params.brainId}/${params.token}/${params.filename}`,
+            `/notes-images/${encodeURIComponent(params.brainId)}/${encodeURIComponent(params.token)}/${encodeURIComponent(params.filename)}`,
             {
                 responseType: 'arraybuffer'
             }
@@ -50,4 +56,4 @@ export class NotesImagesApi {
         const base64 = Buffer.from(imageData).toString('base64');
         return `data:${mimeType};base64,${base64}`;
     }
-} 
+}

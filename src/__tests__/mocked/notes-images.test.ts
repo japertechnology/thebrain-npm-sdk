@@ -15,11 +15,11 @@ describe('NotesImagesApi', () => {
     describe('getNoteImage', () => {
         it('should get note image as ArrayBuffer', async () => {
             const brainId = '123e4567-e89b-12d3-a456-426614174000';
-            const token = 'test-token';
-            const filename = 'test-image.jpg';
+            const token = 'test token+value';
+            const filename = 'test image (1).jpg';
             const mockImageData = new ArrayBuffer(8);
 
-            mock.onGet(`/notes-images/${brainId}/${token}/${filename}`)
+            mock.onGet(`/notes-images/${brainId}/${encodeURIComponent(token)}/${encodeURIComponent(filename)}`)
                 .reply(200, mockImageData, {
                     'content-type': 'image/jpeg'
                 });
@@ -30,27 +30,25 @@ describe('NotesImagesApi', () => {
         });
 
         it('should throw error on invalid parameters', async () => {
-            const brainId = 'invalid-uuid';
-            const token = 'test-token';
-            const filename = 'test-image.jpg';
+            const brainId = '123e4567-e89b-12d3-a456-426614174000';
 
-            await expect(api.getNoteImage(brainId, token, filename))
-                .rejects
-                .toThrow();
+            await expect(api.getNoteImage('invalid-uuid', 'token', 'file.jpg')).rejects.toThrow();
+            await expect(api.getNoteImage(brainId, '../token', 'file.jpg')).rejects.toThrow();
+            await expect(api.getNoteImage(brainId, 'token', '../file.jpg')).rejects.toThrow();
         });
     });
 
     describe('getNoteImageAsDataUrl', () => {
         it('should convert image to base64 data URL', async () => {
             const brainId = '123e4567-e89b-12d3-a456-426614174000';
-            const token = 'test-token';
-            const filename = 'test-image.jpg';
-            const mimeType = 'image/jpeg';
+            const token = 'token with space';
+            const filename = 'note image.png';
+            const mimeType = 'image/png';
             const mockImageData = new ArrayBuffer(8);
             const mockImageArray = new Uint8Array(mockImageData);
             mockImageArray.fill(1); // Fill with some test data
 
-            mock.onGet(`/notes-images/${brainId}/${token}/${filename}`)
+            mock.onGet(`/notes-images/${brainId}/${encodeURIComponent(token)}/${encodeURIComponent(filename)}`)
                 .reply(200, mockImageData, {
                     'content-type': mimeType
                 });
@@ -60,14 +58,12 @@ describe('NotesImagesApi', () => {
         });
 
         it('should throw error on invalid parameters', async () => {
-            const brainId = 'invalid-uuid';
-            const token = 'test-token';
-            const filename = 'test-image.jpg';
+            const brainId = '123e4567-e89b-12d3-a456-426614174000';
             const mimeType = 'image/jpeg';
 
-            await expect(api.getNoteImageAsDataUrl(brainId, token, filename, mimeType))
-                .rejects
-                .toThrow();
+            await expect(api.getNoteImageAsDataUrl('invalid-uuid', 'token', 'file.jpg', mimeType)).rejects.toThrow();
+            await expect(api.getNoteImageAsDataUrl(brainId, '../token', 'file.jpg', mimeType)).rejects.toThrow();
+            await expect(api.getNoteImageAsDataUrl(brainId, 'token', '../file.jpg', mimeType)).rejects.toThrow();
         });
     });
-}); 
+});
