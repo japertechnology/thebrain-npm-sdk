@@ -11,7 +11,7 @@ let helper: TestHelper;
 let api: TheBrainApi;
 let brain: BrainDto;
 
-describe('Thoughts API E2E', () => {
+describe.skipIf(!process.env.THEBRAIN_API_KEY)('Thoughts API E2E', () => {
     beforeAll(async () => {
         helper = new TestHelper();
         api = helper.api;

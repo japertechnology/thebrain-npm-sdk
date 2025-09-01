@@ -6,7 +6,7 @@ import { UserDto } from '../../model';
 let helper: TestHelper;
 let api: TheBrainApi;
 
-describe('Users API E2E', () => {
+describe.skipIf(!process.env.THEBRAIN_API_KEY)('Users API E2E', () => {
     beforeAll(async () => {
         helper = new TestHelper();
         api = helper.api;

@@ -7,7 +7,7 @@ let testBrainId: string;
 let helper: TestHelper;
 let api: TheBrainApi;
 
-describe('Search API E2E', () => {
+describe.skipIf(!process.env.THEBRAIN_API_KEY)('Search API E2E', () => {
     beforeAll(async () => {
         // Initialize API and create test resources
         helper = new TestHelper();
