@@ -11,15 +11,23 @@ import { UsersApi } from "./users";
 import { ThoughtsApi } from "./thoughts";
 import logger from "./logger";
 
-const ConfigSchema = z.object({
-    apiKey: z.string().min(1, "API key is required"),
-    requestLimit: z.number().default(10),
-    rateLimitWindows: z.number().default(1000),
-    baseURL: z.string().default("https://api.bra.in"),
-    logLevel: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).optional(),
-})
+const ConfigSchema = z
+    .object({
+        apiKey: z.string().min(1, "API key is required"),
+        requestLimit: z.number().default(10),
+        rateLimitWindows: z.number().default(1000),
+        baseURL: z.string().default("https://api.bra.in"),
+        logLevel: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).optional(),
+    })
+    .passthrough();
 
-export type BrainAPIConfig = z.infer<typeof ConfigSchema> & Omit<AxiosRequestConfig, keyof z.infer<typeof ConfigSchema>>;
+export type BrainAPIConfig = AxiosRequestConfig & {
+    apiKey: string;
+    requestLimit?: number;
+    rateLimitWindows?: number;
+    baseURL?: string;
+    logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+};
 
 export class TheBrainApi {
     private readonly axios: AxiosInstance;
