@@ -8,7 +8,7 @@ let testThoughtId: string;
 let helper: TestHelper;
 let api: TheBrainApi;
 
-describe('Notes Images API E2E', () => {
+describe.skipIf(!process.env.THEBRAIN_API_KEY)('Notes Images API E2E', () => {
     beforeAll(async () => {
         helper = new TestHelper();
         api = helper.api;

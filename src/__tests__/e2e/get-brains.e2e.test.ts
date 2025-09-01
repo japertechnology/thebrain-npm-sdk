@@ -2,7 +2,7 @@ import { describe, it, beforeAll, expect } from 'vitest';
 import { TheBrainApi } from '../../index';
 import { loadConfig } from './config';
 
-describe('Get Brains API E2E Test', () => {
+describe.skipIf(!process.env.THEBRAIN_API_KEY)('Get Brains API E2E Test', () => {
     let api: TheBrainApi;
 
     beforeAll(async () => {

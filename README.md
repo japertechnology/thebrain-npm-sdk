@@ -3,6 +3,7 @@
 A TypeScript client for TheBrain API that provides type-safe access to all API endpoints.
 
 ## Installation
+Requires **Node.js 18** or later.
 
 ```bash
 yarn add thebrain-api
