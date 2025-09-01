@@ -8,15 +8,17 @@ describe('UsersApi', () => {
     let mock: MockAdapter;
     let api: UsersApi;
 
-    const mockUser: UserDto = {
-        id: '123e4567-e89b-12d3-a456-426614174000',
-        username: 'johndoe',
-        lastName: 'Doe',
-        firstName: 'John',
-        emailAddress: 'john.doe@example.com',
-        servicesExpiry: '2024-12-31T23:59:59Z',
-        accountType: 'premium'
-    };
+    const mockUsers: UserDto[] = [
+        {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            username: 'johndoe',
+            lastName: 'Doe',
+            firstName: 'John',
+            emailAddress: 'john.doe@example.com',
+            servicesExpiry: '2024-12-31T23:59:59Z',
+            accountType: 'premium'
+        }
+    ];
 
     beforeEach(() => {
         const instance = axios.create();
@@ -31,29 +33,17 @@ describe('UsersApi', () => {
 
     describe('getOrganizationMembers', () => {
         it('should get organization members', async () => {
-            mock.onGet('/users/organization')
-                .reply(200, mockUser);
+            mock.onGet('/users/organization').reply(200, mockUsers);
 
             const result = await api.getOrganizationMembers();
-            expect(result).toEqual(mockUser);
+            expect(result).toEqual(mockUsers);
         });
 
         it('should handle empty response', async () => {
-            const emptyUser: UserDto = {
-                id: '123e4567-e89b-12d3-a456-426614174000',
-                username: null,
-                lastName: null,
-                firstName: null,
-                emailAddress: null,
-                servicesExpiry: null,
-                accountType: null
-            };
-
-            mock.onGet('/users/organization')
-                .reply(200, emptyUser);
+            mock.onGet('/users/organization').reply(200, []);
 
             const result = await api.getOrganizationMembers();
-            expect(result).toEqual(emptyUser);
+            expect(result).toEqual([]);
         });
 
         it('should handle server error', async () => {
