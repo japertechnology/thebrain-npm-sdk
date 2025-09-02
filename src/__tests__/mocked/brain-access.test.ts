@@ -190,5 +190,19 @@ describe('BrainAccessApi', () => {
                 .rejects
                 .toThrow(/Provide either emailAddress or userId, but not both/);
         });
+
+        it('should omit undefined parameters from the query string', async () => {
+            const email = 'test@example.com';
+            mock.onDelete(`/brain-access/${mockBrainId}`).reply(200);
+
+            await api.removeBrainAccess(mockBrainId, { emailAddress: email });
+            expect(mock.history.delete[0].params).toEqual({ emailAddress: email });
+
+            mock.resetHistory();
+            mock.onDelete(`/brain-access/${mockBrainId}`).reply(200);
+
+            await api.removeBrainAccess(mockBrainId, { userId: mockUserId });
+            expect(mock.history.delete[0].params).toEqual({ userId: mockUserId });
+        });
     });
 });

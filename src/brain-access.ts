@@ -73,9 +73,8 @@ export class BrainAccessApi {
         if (emailAddress && userId) {
             throw new Error("Provide either emailAddress or userId, but not both");
         }
+        const params = emailAddress ? { emailAddress } : { userId: userId! };
 
-        await this.axiosInstance.delete(`/brain-access/${brainId}`, {
-            params: { emailAddress, userId }
-        });
+        await this.axiosInstance.delete(`/brain-access/${brainId}`, { params });
     }
 }
