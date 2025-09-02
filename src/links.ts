@@ -1,5 +1,12 @@
 import { AxiosInstance } from "axios";
-import { LinkDto, LinkCreateModel, LinkDtoOperation, LinkDtoJsonPatchDocument, CreateLinkResponseModel } from "./model";
+import {
+    LinkDto,
+    LinkCreateModel,
+    LinkDtoOperation,
+    LinkDtoJsonPatchDocument,
+    CreateLinkResponseModel,
+    AttachmentDto,
+} from "./model";
 
 /** API client for creating and managing links between thoughts. */
 export class LinksApi {
@@ -47,8 +54,8 @@ export class LinksApi {
     }
 
     /** Retrieve attachments associated with a link. */
-    async getLinkAttachments(brainId: string, linkId: string): Promise<any[]> {
-        const { data } = await this.axiosInstance.get<any[]>(`/links/${brainId}/${linkId}/attachments`);
-        return data;
+    async getLinkAttachments(brainId: string, linkId: string): Promise<AttachmentDto[]> {
+        const { data } = await this.axiosInstance.get<unknown>(`/links/${brainId}/${linkId}/attachments`);
+        return AttachmentDto.array().parse(data);
     }
 }
