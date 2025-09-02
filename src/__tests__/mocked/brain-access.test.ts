@@ -147,6 +147,28 @@ describe('BrainAccessApi', () => {
                 .rejects
                 .toThrow(/Provide either emailAddress or userId, but not both/);
         });
+
+        it('should reject invalid email address format', async () => {
+            const invalidAccess = {
+                emailAddress: 'not-an-email',
+                accessType: AccessType.Reader
+            };
+
+            await expect(api.setBrainAccessLevel(mockBrainId, invalidAccess as any))
+                .rejects
+                .toThrow();
+        });
+
+        it('should reject invalid userId format', async () => {
+            const invalidAccess = {
+                userId: 'not-a-uuid',
+                accessType: AccessType.Reader
+            };
+
+            await expect(api.setBrainAccessLevel(mockBrainId, invalidAccess as any))
+                .rejects
+                .toThrow();
+        });
     });
 
     describe('removeBrainAccess', () => {
@@ -189,6 +211,22 @@ describe('BrainAccessApi', () => {
             }))
                 .rejects
                 .toThrow(/Provide either emailAddress or userId, but not both/);
+        });
+
+        it('should reject invalid email address format', async () => {
+            await expect(api.removeBrainAccess(mockBrainId, {
+                emailAddress: 'not-an-email'
+            }))
+                .rejects
+                .toThrow();
+        });
+
+        it('should reject invalid userId format', async () => {
+            await expect(api.removeBrainAccess(mockBrainId, {
+                userId: 'not-a-uuid'
+            }))
+                .rejects
+                .toThrow();
         });
     });
 });
