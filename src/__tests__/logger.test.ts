@@ -1,3 +1,4 @@
+/** Tests for logger.test. */
 import { describe, it, expect } from 'vitest';
 import logger from '../logger';
 import { TheBrainApi } from '../index';

@@ -1,7 +1,11 @@
 import bunyan from 'bunyan';
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-// Create the logger instance
+/**
+ * Shared Bunyan logger configured with serializers for Axios requests and
+ * responses.  Consumers can adjust the logging level via
+ * {@link TheBrainApi.setLogLevel}.
+ */
 const logger = bunyan.createLogger({
     name: 'thebrain-api',
     level: process.env.LOG_LEVEL || 'info',
@@ -61,4 +65,5 @@ function sanitizeHeaders(headers: Record<string, any> = {}) {
 }
 
 // Export the logger instance
-export default logger; 
+export default logger;
+

@@ -1,3 +1,4 @@
+/** Tests for axios-options.test. */
 import { describe, it, expect, vi } from 'vitest';
 import axios, { AxiosInstance } from 'axios';
 import { TheBrainApi } from '../index';

@@ -1,3 +1,4 @@
+/** Tests for links.test. */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { LinksApi } from '../../links';
 import axios from 'axios';

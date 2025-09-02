@@ -1,3 +1,8 @@
+/**
+ * Entry point for TheBrain API SDK.  This file exports the {@link TheBrainApi}
+ * class which provides access to all API groups and sets up shared Axios
+ * configuration such as authentication, rate limiting and logging.
+ */
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { z } from "zod";
 import { AttachmentsApi } from "./attachments";
@@ -30,6 +35,9 @@ export type BrainAPIConfig = AxiosRequestConfig & {
     logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 };
 
+/**
+ * Facade class exposing strongly typed access to TheBrain REST API.
+ */
 export class TheBrainApi {
     private readonly axios: AxiosInstance;
     public readonly brains: BrainsApi;
@@ -42,6 +50,12 @@ export class TheBrainApi {
     public readonly brainAccess: BrainAccessApi;
     public readonly thoughts: ThoughtsApi;
 
+    /**
+     * Create a new API client.
+     *
+     * @param config Configuration for authentication and request handling.
+     * @param axiosInstance Optional custom {@link AxiosInstance} to use.
+     */
     constructor(config: BrainAPIConfig, axiosInstance?: AxiosInstance) {
         const { apiKey, requestLimit, rateLimitWindows, baseURL, logLevel, ...rest } = ConfigSchema.parse(config) as BrainAPIConfig;
 
@@ -78,6 +92,12 @@ export class TheBrainApi {
         this.thoughts = new ThoughtsApi(this.axios);
     }
 
+    /**
+     * Install a basic in-memory rate limiter to avoid hitting server limits.
+     *
+     * @param limit Maximum number of requests allowed per window.
+     * @param windowMs Duration of the rate limiting window in milliseconds.
+     */
     private setupRateLimitInterceptors(limit: number, windowMs: number) {
         let requests = 0;
         let windowStart = Date.now();
@@ -101,18 +121,22 @@ export class TheBrainApi {
         });
     }
 
+    /**
+     * Configure request/response logging using Bunyan serializers.  This makes
+     * it easier for library consumers to diagnose API interactions.
+     */
     private setupLoggingInterceptors() {
         // Request interceptor
         this.axios.interceptors.request.use(
             config => {
-                logger.debug({ 
+                logger.debug({
                     req: config,
                     message: `Making ${config.method?.toUpperCase()} request to ${config.url}`
                 }, 'Outgoing request');
                 return config;
             },
             error => {
-                logger.error({ 
+                logger.error({
                     err: error,
                     message: `Failed to make request: ${error.message}`
                 }, 'Request error');
@@ -123,14 +147,14 @@ export class TheBrainApi {
         // Response interceptor
         this.axios.interceptors.response.use(
             response => {
-                logger.debug({ 
+                logger.debug({
                     res: response,
                     message: `Received ${response.status} response from ${response.config.url}`
                 }, 'Incoming response');
                 return response;
             },
             error => {
-                logger.error({ 
+                logger.error({
                     err: error,
                     message: `Request failed with status ${error.response?.status || 'unknown'}: ${error.message}`
                 }, 'Response error');

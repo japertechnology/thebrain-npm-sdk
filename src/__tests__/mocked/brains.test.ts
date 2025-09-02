@@ -1,3 +1,4 @@
+/** Tests for brains.test. */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { BrainsApi } from '../../brains';
 import axios from 'axios';

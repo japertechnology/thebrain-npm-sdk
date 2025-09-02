@@ -1,3 +1,4 @@
+/** Tests for attachments.test. */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { AttachmentsApi } from '../../attachments';
 import axios from 'axios';

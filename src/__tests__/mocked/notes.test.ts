@@ -1,3 +1,4 @@
+/** Tests for notes.test. */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NotesApi } from '../../notes';
 import axios from 'axios';

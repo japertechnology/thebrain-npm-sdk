@@ -1,6 +1,7 @@
 import { AxiosInstance } from "axios";
 import { UserDto } from "./model";
 
+/** API client for user-related endpoints. */
 export class UsersApi {
     constructor(private readonly axios: AxiosInstance) {}
 

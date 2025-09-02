@@ -1,7 +1,9 @@
 import { AxiosInstance } from "axios";
 import { z } from "zod";
 
-// Schema for brain accessor data
+/**
+ * Schema describing a user who has access to a brain.
+ */
 const BrainAccessorSchema = z.object({
     accessorId: z.string().uuid(),
     name: z.string().nullable(),
@@ -12,19 +14,24 @@ const BrainAccessorSchema = z.object({
 
 export type BrainAccessor = z.infer<typeof BrainAccessorSchema>;
 
-// Schema for setting brain access
+/**
+ * Schema used for updating access levels for a brain.
+ */
 const SetBrainAccessSchema = z.object({
     emailAddress: z.string().email().optional(),
     userId: z.string().uuid().optional(),
     accessType: z.number().int().min(1).max(4) // 1: Reader, 2: Writer, 3: Admin, 4: PublicReader
 }).refine(data => !(data.emailAddress && data.userId), {
-    message: "Provide either emailAddress or userId, but not both"
+    message: "Provide either emailAddress or userId, but not both",
 }).refine(data => data.emailAddress || data.userId, {
-    message: "Either emailAddress or userId must be provided"
+    message: "Either emailAddress or userId must be provided",
 });
 
 export type SetBrainAccess = z.infer<typeof SetBrainAccessSchema>;
 
+/**
+ * API client for administering user access to a brain.
+ */
 export class BrainAccessApi {
     constructor(private readonly axiosInstance: AxiosInstance) {}
 
@@ -56,7 +63,7 @@ export class BrainAccessApi {
      * @param options Either email address or userId of the user to remove
      */
     async removeBrainAccess(
-        brainId: string, 
+        brainId: string,
         options: { emailAddress?: string; userId?: string }
     ): Promise<void> {
         const { emailAddress, userId } = options;
@@ -71,4 +78,4 @@ export class BrainAccessApi {
             params: { emailAddress, userId }
         });
     }
-} 
+}

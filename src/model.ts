@@ -1,3 +1,8 @@
+/**
+ * Shared type and schema definitions used throughout the SDK.  Most types are
+ * derived from Zod schemas to provide runtime validation in addition to static
+ * TypeScript typings.
+ */
 import { z } from "zod";
 
 // Public enums for SDK users

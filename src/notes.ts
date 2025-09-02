@@ -1,6 +1,7 @@
 import { AxiosInstance } from "axios";
 import { NotesDto, NotesUpdateModel } from "./model";
 
+/** API client for reading and modifying thought notes. */
 export class NotesApi {
     constructor(private readonly axios: AxiosInstance) {}
 

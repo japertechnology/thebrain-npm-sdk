@@ -23,6 +23,7 @@ export interface SearchOptions {
     excludeBrainIds?: string[];
 }
 
+/** Client for performing search queries across brains. */
 export class SearchApi {
     constructor(private readonly axiosInstance: AxiosInstance) {}
 

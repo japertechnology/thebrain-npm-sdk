@@ -1,13 +1,14 @@
 import { AxiosInstance } from "axios";
-import { 
-    ThoughtDto, 
-    ThoughtKind, 
-    ThoughtCreateModel, 
-    ThoughtDtoOperation, 
-    ThoughtDtoJsonPatchDocument, 
+import {
+    ThoughtDto,
+    ThoughtKind,
+    ThoughtCreateModel,
+    ThoughtDtoOperation,
+    ThoughtDtoJsonPatchDocument,
     CreateThoughtResponseModel
 } from "./model";
 
+/** API client for CRUD operations on thoughts within a brain. */
 export class ThoughtsApi {
     constructor(private readonly axiosInstance: AxiosInstance) {}
 

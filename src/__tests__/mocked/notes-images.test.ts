@@ -1,3 +1,4 @@
+/** Tests for notes-images.test. */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NotesImagesApi } from '../../notes-images';
 import axios from 'axios';

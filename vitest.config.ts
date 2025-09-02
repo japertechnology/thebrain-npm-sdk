@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config';
 
+/** Vitest configuration for running unit and integration tests. */
 export default defineConfig({
   test: {
     testTimeout: 10000,
@@ -26,3 +27,4 @@ export default defineConfig({
     },
   },
 });
+

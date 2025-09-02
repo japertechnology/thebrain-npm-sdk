@@ -1,3 +1,4 @@
+/** Tests for search.test. */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { SearchApi } from '../../search';
 import axios from 'axios';

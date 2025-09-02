@@ -1,3 +1,4 @@
+/** Tests for users.test. */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { UsersApi } from '../../users';
 import axios from 'axios';

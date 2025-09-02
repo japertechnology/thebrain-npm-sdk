@@ -1,3 +1,4 @@
+/** Tests for config. */
 import { z } from 'zod';
 import { BrainAPIConfig } from '../../index';
 

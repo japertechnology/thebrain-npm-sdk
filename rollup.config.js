@@ -5,6 +5,7 @@ import dts from 'rollup-plugin-dts';
 import terser from '@rollup/plugin-terser';
 import { readFileSync } from 'fs';
 
+/** Build configuration for bundling the SDK with Rollup. */
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf8'));
 
 export default [
@@ -57,4 +58,5 @@ export default [
     output: [{ file: 'dist/index.d.ts', format: 'esm' }],
     plugins: [dts()],
   },
-]; 
+];
+

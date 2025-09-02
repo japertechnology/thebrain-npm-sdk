@@ -1,3 +1,4 @@
+/** Tests for helpers. */
 import { TheBrainApi } from '../../index';
 import { BrainDto } from '../../model';
 import { loadConfig } from './config';

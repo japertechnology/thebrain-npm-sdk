@@ -1,3 +1,4 @@
+/** Tests for thoughts.e2e.test. */
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { TheBrainApi } from '../../index';
 import { loadConfig } from './config';
