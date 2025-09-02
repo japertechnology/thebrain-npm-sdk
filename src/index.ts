@@ -20,7 +20,9 @@ import bunyan from "bunyan";
 const ConfigSchema = z
     .object({
         apiKey: z.string().min(1, "API key is required"),
+        // Limit of requests allowed per rate limit window
         requestLimit: z.number().int().positive().default(10),
+        // Duration of the rate limit window in milliseconds
         rateLimitWindows: z.number().int().positive().default(1000),
         baseURL: z.string().default("https://api.bra.in"),
         logLevel: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).optional(),
