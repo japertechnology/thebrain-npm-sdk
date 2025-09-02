@@ -44,7 +44,8 @@ export class AttachmentsApi {
     async addFileAttachment(brainId: string, thoughtId: string, file: File): Promise<void> {
         const formData = new FormData();
         formData.append('file', file);
-        await this.axiosInstance.post(`/attachments/${brainId}/${thoughtId}/file`, formData);
+        const headers = (formData as any).getHeaders?.();
+        await this.axiosInstance.post(`/attachments/${brainId}/${thoughtId}/file`, formData, { headers });
     }
 
     /**

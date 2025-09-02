@@ -130,6 +130,27 @@ describe('AttachmentsApi', () => {
                 .toThrow();
         });
 
+        it('should include boundary in Content-Type header in Node environment', async () => {
+            const NodeFormData = (await import('form-data')).default;
+            const originalFormData = (globalThis as any).FormData;
+            (globalThis as any).FormData = NodeFormData as any;
+
+            const mockFile = Buffer.from('test content');
+            let receivedHeaders: any;
+            mock.onPost(`/attachments/${mockBrainId}/${mockThoughtId}/file`).reply((config) => {
+                receivedHeaders = config.headers;
+                return [200];
+            });
+
+            await api.addFileAttachment(mockBrainId, mockThoughtId, mockFile as any);
+
+            const contentType = receivedHeaders['content-type'] || receivedHeaders['Content-Type'];
+            expect(contentType).toContain('multipart/form-data');
+            expect(contentType).toMatch(/boundary=/);
+
+            (globalThis as any).FormData = originalFormData;
+        });
+
         it('should throw error on invalid parameters', async () => {
             const invalidBrainId = 'invalid-uuid';
             const invalidThoughtId = 'invalid-uuid';
