@@ -4,7 +4,20 @@ import { z } from "zod";
 // Schema for note image request parameters
 // Validate token and filename to prevent path traversal
 const safePathSegment = z.string().min(1).refine(
-    (value) => !value.includes("../") && !value.includes("..\\") && !value.includes("/") && !value.includes("\\"),
+    (value) => {
+        if (value.includes("%")) {
+            return false;
+        }
+        let decoded: string;
+        try {
+            decoded = decodeURIComponent(value);
+        } catch {
+            return false;
+        }
+        return !["../", "..\\", "/", "\\"].some((pattern) =>
+            value.includes(pattern) || decoded.includes(pattern)
+        );
+    },
     { message: "Invalid path segment" }
 );
 
