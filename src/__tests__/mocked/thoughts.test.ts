@@ -3,7 +3,16 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { ThoughtsApi } from '../../thoughts';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { ThoughtDto, ThoughtCreateModel, ThoughtDtoJsonPatchDocument, ThoughtKind, OperationType } from '../../model';
+import {
+    ThoughtDto,
+    ThoughtCreateModel,
+    ThoughtDtoJsonPatchDocument,
+    ThoughtKind,
+    OperationType,
+    type ThoughtGraphDto,
+    type AttachmentDto,
+    type ModificationLogDto,
+} from '../../model';
 
 describe('ThoughtsApi', () => {
     let mock: MockAdapter;
@@ -11,6 +20,7 @@ describe('ThoughtsApi', () => {
 
     const mockBrainId = '123e4567-e89b-12d3-a456-426614174000';
     const mockThoughtId = '987fcdeb-51a2-43d7-9012-345678901234';
+    const mockAttachmentId = '11111111-2222-3333-4444-555555555555';
 
     const mockThought: ThoughtDto = {
         id: mockThoughtId,
@@ -134,20 +144,19 @@ describe('ThoughtsApi', () => {
 
     describe('getThoughtGraph', () => {
         it('should get thought graph', async () => {
-            const mockGraph = {
+            const mockGraph: ThoughtGraphDto = {
                 activeThought: mockThought,
                 parents: [],
                 children: [],
                 jumps: [],
                 siblings: [],
                 tags: [],
-                type: null,
+                type: mockThought,
                 links: [],
                 attachments: []
             };
 
-            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/graph`)
-                .reply(200, mockGraph);
+            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/graph`).reply(200, mockGraph);
 
             const result = await api.getThoughtGraph(mockBrainId, mockThoughtId);
             expect(result).toEqual(mockGraph);
@@ -161,18 +170,25 @@ describe('ThoughtsApi', () => {
                 .rejects
                 .toThrow();
         });
+
+        it('should throw error on invalid response data', async () => {
+            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/graph`).reply(200, { foo: 'bar' });
+            await expect(api.getThoughtGraph(mockBrainId, mockThoughtId)).rejects.toThrow();
+        });
     });
 
     describe('getThoughtAttachments', () => {
         it('should get thought attachments', async () => {
-            const mockAttachments = [{
-                id: 'attachment-id',
+            const mockAttachments: AttachmentDto[] = [{
+                id: mockAttachmentId,
                 brainId: mockBrainId,
                 sourceId: mockThoughtId,
                 sourceType: 2,
                 creationDateTime: '2024-03-20T10:00:00Z',
                 modificationDateTime: '2024-03-20T10:00:00Z',
                 name: 'Test Attachment',
+                typeId: null,
+                label: null,
                 position: 0,
                 fileModificationDateTime: null,
                 type: 1,
@@ -181,8 +197,7 @@ describe('ThoughtsApi', () => {
                 location: null
             }];
 
-            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/attachments`)
-                .reply(200, mockAttachments);
+            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/attachments`).reply(200, mockAttachments);
 
             const result = await api.getThoughtAttachments(mockBrainId, mockThoughtId);
             expect(result).toEqual(mockAttachments);
@@ -195,6 +210,11 @@ describe('ThoughtsApi', () => {
             await expect(api.getThoughtAttachments(invalidBrainId, invalidThoughtId))
                 .rejects
                 .toThrow();
+        });
+
+        it('should throw error on invalid response data', async () => {
+            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/attachments`).reply(200, [{ foo: 'bar' }]);
+            await expect(api.getThoughtAttachments(mockBrainId, mockThoughtId)).rejects.toThrow();
         });
     });
 
@@ -315,25 +335,21 @@ describe('ThoughtsApi', () => {
 
     describe('getThoughtModifications', () => {
         it('should get thought modifications', async () => {
-            const mockModifications = [{
-                sourceId: mockThoughtId,
-                sourceType: 2,
-                extraAId: null,
-                extraAType: -1,
-                extraBId: null,
-                extraBType: -1,
-                modType: 101,
-                oldValue: null,
-                newValue: null,
-                userId: 'user-id',
+            const mockModifications: ModificationLogDto[] = [{
+                id: '44444444-4444-4444-4444-444444444444',
                 brainId: mockBrainId,
                 creationDateTime: '2024-03-20T10:00:00Z',
                 modificationDateTime: '2024-03-20T10:00:00Z',
-                syncUpdateDateTime: null
+                sourceId: mockThoughtId,
+                sourceType: 2,
+                modType: 101,
+                oldValue: null,
+                newValue: null,
+                userId: '55555555-5555-5555-5555-555555555555',
+                syncUpdateDateTime: null,
             }];
 
-            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/modifications`)
-                .reply(200, mockModifications);
+            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/modifications`).reply(200, mockModifications);
 
             const result = await api.getThoughtModifications(mockBrainId, mockThoughtId);
             expect(result).toEqual(mockModifications);
@@ -346,6 +362,11 @@ describe('ThoughtsApi', () => {
             await expect(api.getThoughtModifications(invalidBrainId, invalidThoughtId))
                 .rejects
                 .toThrow();
+        });
+
+        it('should throw error on invalid response data', async () => {
+            mock.onGet(`/thoughts/${mockBrainId}/${mockThoughtId}/modifications`).reply(200, [{ foo: 'bar' }]);
+            await expect(api.getThoughtModifications(mockBrainId, mockThoughtId)).rejects.toThrow();
         });
     });
 
