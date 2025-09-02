@@ -13,6 +13,7 @@ describe('LinksApi', () => {
     const mockLinkId = '987fcdeb-51a2-43d7-9012-345678901234';
     const mockThoughtIdA = '11111111-1111-1111-1111-111111111111';
     const mockThoughtIdB = '22222222-2222-2222-2222-222222222222';
+    const mockAttachmentId = '33333333-3333-3333-3333-333333333333';
 
     const mockLink: LinkDto = {
         id: mockLinkId,
@@ -205,13 +206,15 @@ describe('LinksApi', () => {
     describe('getLinkAttachments', () => {
         it('should get link attachments', async () => {
             const mockAttachments = [{
-                id: 'attachment-id',
+                id: mockAttachmentId,
                 brainId: mockBrainId,
                 sourceId: mockLinkId,
                 sourceType: 3,
                 creationDateTime: '2024-03-20T10:00:00Z',
                 modificationDateTime: '2024-03-20T10:00:00Z',
                 name: 'Test Attachment',
+                typeId: null,
+                label: null,
                 position: 0,
                 fileModificationDateTime: null,
                 type: 1,
