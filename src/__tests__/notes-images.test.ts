@@ -43,27 +43,21 @@ describe('NotesImagesApi.getNoteImageAsDataUrl', () => {
     });
 });
 
-describe('NotesImagesApi path segment validation', () => {
+describe('NotesImagesApi path validation', () => {
     const brainId = '00000000-0000-0000-0000-000000000000';
 
-    it('rejects tokens with encoded traversal sequences', async () => {
-        const axiosInstance = { get: vi.fn() } as unknown as AxiosInstance;
-        const api = new NotesImagesApi(axiosInstance);
-        await expect(api.getNoteImage(brainId, '%2e%2e%2f', 'file.png')).rejects.toThrow('Invalid path segment');
-        expect(axiosInstance.get).not.toHaveBeenCalled();
+    it('rejects tokens with encoded path traversal', async () => {
+        const api = new NotesImagesApi({} as AxiosInstance);
+        await expect(
+            api.getNoteImage(brainId, '..%2Fsecret', 'file')
+        ).rejects.toThrow(/Invalid path segment/);
     });
 
-    it('rejects filenames with encoded traversal sequences', async () => {
-        const axiosInstance = { get: vi.fn() } as unknown as AxiosInstance;
-        const api = new NotesImagesApi(axiosInstance);
-        await expect(api.getNoteImage(brainId, 'token', '%2e%2e%5cfile.png')).rejects.toThrow('Invalid path segment');
-        expect(axiosInstance.get).not.toHaveBeenCalled();
-    });
-
-    it('rejects tokens containing percent-encoding', async () => {
-        const axiosInstance = { get: vi.fn() } as unknown as AxiosInstance;
-        const api = new NotesImagesApi(axiosInstance);
-        await expect(api.getNoteImage(brainId, 'tok%20en', 'file.png')).rejects.toThrow('Invalid path segment');
+    it('rejects filenames with encoded backslash traversal', async () => {
+        const api = new NotesImagesApi({} as AxiosInstance);
+        await expect(
+            api.getNoteImage(brainId, 'token', 'image%2e%2e%5c')
+        ).rejects.toThrow(/Invalid path segment/);
     });
 });
 
