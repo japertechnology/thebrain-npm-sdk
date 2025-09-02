@@ -1,6 +1,22 @@
 import { AxiosInstance } from "axios";
 import { SearchResultDto } from "./model";
 
+const paramsSerializer = (params: Record<string, any>): string => {
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+        if (value === undefined || value === null) continue;
+        if (Array.isArray(value)) {
+            if (value.length === 0) continue;
+            for (const v of value) {
+                searchParams.append(key, v);
+            }
+        } else {
+            searchParams.append(key, String(value));
+        }
+    }
+    return searchParams.toString();
+};
+
 export interface SearchOptions {
     maxResults?: number;
     onlySearchThoughtNames?: boolean;
@@ -20,7 +36,8 @@ export class SearchApi {
                 queryText,
                 maxResults,
                 onlySearchThoughtNames
-            }
+            },
+            paramsSerializer
         });
         return response.data;
     }
@@ -36,7 +53,8 @@ export class SearchApi {
                 maxResults,
                 onlySearchThoughtNames,
                 excludeBrainIds
-            }
+            },
+            paramsSerializer
         });
         return response.data;
     }
@@ -51,7 +69,8 @@ export class SearchApi {
                 queryText,
                 maxResults,
                 onlySearchThoughtNames
-            }
+            },
+            paramsSerializer
         });
         return response.data;
     }
