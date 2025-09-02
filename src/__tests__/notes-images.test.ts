@@ -43,3 +43,21 @@ describe('NotesImagesApi.getNoteImageAsDataUrl', () => {
     });
 });
 
+describe('NotesImagesApi path validation', () => {
+    const brainId = '00000000-0000-0000-0000-000000000000';
+
+    it('rejects tokens with encoded path traversal', async () => {
+        const api = new NotesImagesApi({} as AxiosInstance);
+        await expect(
+            api.getNoteImage(brainId, '..%2Fsecret', 'file')
+        ).rejects.toThrow(/Invalid path segment/);
+    });
+
+    it('rejects filenames with encoded backslash traversal', async () => {
+        const api = new NotesImagesApi({} as AxiosInstance);
+        await expect(
+            api.getNoteImage(brainId, 'token', 'image%2e%2e%5c')
+        ).rejects.toThrow(/Invalid path segment/);
+    });
+});
+

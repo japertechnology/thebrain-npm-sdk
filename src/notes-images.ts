@@ -3,10 +3,35 @@ import { z } from "zod";
 
 // Schema for note image request parameters
 // Validate token and filename to prevent path traversal
-const safePathSegment = z.string().min(1).refine(
-    (value) => !value.includes("../") && !value.includes("..\\") && !value.includes("/") && !value.includes("\\"),
-    { message: "Invalid path segment" }
-);
+const safePathSegment = z
+    .string()
+    .min(1)
+    .refine((value) => {
+        // Reject obvious traversal attempts and any URL encoded sequences
+        if (
+            value.includes("../") ||
+            value.includes("..\\") ||
+            value.includes("/") ||
+            value.includes("\\") ||
+            value.includes("%")
+        ) {
+            return false;
+        }
+
+        // Also decode the value and check again to catch encoded traversal
+        try {
+            const decoded = decodeURIComponent(value);
+            return (
+                !decoded.includes("../") &&
+                !decoded.includes("..\\") &&
+                !decoded.includes("/") &&
+                !decoded.includes("\\")
+            );
+        } catch {
+            // If decoding fails it's an invalid path segment
+            return false;
+        }
+    }, { message: "Invalid path segment" });
 
 const NoteImageRequestSchema = z.object({
     brainId: z.string().uuid(),
