@@ -8,7 +8,7 @@ const paramsSerializer = (params: Record<string, any>): string => {
         if (Array.isArray(value)) {
             if (value.length === 0) continue;
             for (const v of value) {
-                searchParams.append(key, v);
+                searchParams.append(key, String(v));
             }
         } else {
             searchParams.append(key, String(value));
