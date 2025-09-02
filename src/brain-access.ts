@@ -30,6 +30,20 @@ const SetBrainAccessSchema = z.object({
 export type SetBrainAccess = z.infer<typeof SetBrainAccessSchema>;
 
 /**
+ * Schema used for removing access for a brain.
+ */
+const RemoveBrainAccessSchema = z.object({
+    emailAddress: z.string().email().optional(),
+    userId: z.string().uuid().optional()
+}).refine(data => !(data.emailAddress && data.userId), {
+    message: "Provide either emailAddress or userId, but not both",
+}).refine(data => data.emailAddress || data.userId, {
+    message: "Either emailAddress or userId must be provided",
+});
+
+export type RemoveBrainAccess = z.infer<typeof RemoveBrainAccessSchema>;
+
+/**
  * API client for administering user access to a brain.
  */
 export class BrainAccessApi {
@@ -64,7 +78,7 @@ export class BrainAccessApi {
      */
     async removeBrainAccess(
         brainId: string,
-        options: { emailAddress?: string; userId?: string }
+        options: RemoveBrainAccess
     ): Promise<void> {
         const { emailAddress, userId } = options;
         if (!emailAddress && !userId) {
