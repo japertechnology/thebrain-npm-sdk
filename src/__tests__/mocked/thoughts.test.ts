@@ -1,3 +1,4 @@
+/** Tests for thoughts.test. */
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ThoughtsApi } from '../../thoughts';
 import axios from 'axios';

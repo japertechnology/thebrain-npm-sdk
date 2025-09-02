@@ -1,3 +1,4 @@
+/** Tests for create-brain.integration.test. */
 import { describe, it, expect } from 'vitest';
 import axios from 'axios';
 import { BrainsApi } from '../../brains';

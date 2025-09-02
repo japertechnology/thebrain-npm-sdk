@@ -1,3 +1,4 @@
+/** Tests for brain-access.test. */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { BrainAccessApi, BrainAccessor, SetBrainAccess } from '../../brain-access';
 import axios from 'axios';

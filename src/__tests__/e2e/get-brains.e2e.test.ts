@@ -1,3 +1,4 @@
+/** Tests for get-brains.e2e.test. */
 import { describe, it, beforeAll, expect } from 'vitest';
 import { TheBrainApi } from '../../index';
 import { loadConfig } from './config';

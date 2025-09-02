@@ -1,3 +1,4 @@
+/** Tests for notes-images.test. */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import type { AxiosInstance } from 'axios';
 import { NotesImagesApi } from '../notes-images';

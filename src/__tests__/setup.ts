@@ -1,3 +1,4 @@
+/** Tests for setup. */
 import { vi } from 'vitest';
 
 // Mock console.error to avoid noise in test output
