@@ -97,7 +97,8 @@ const BaseModificationModel = z.object({
 
 // Brain-related schemas
 export const BrainDto = BaseEntitySchema.extend({
-    name: z.string().nullable(),
+    // Name may be omitted or null depending on the API response
+    name: z.string().nullish(),
     homeThoughtId: z.string().uuid(),
 });
 
