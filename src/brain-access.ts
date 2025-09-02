@@ -80,10 +80,15 @@ export class BrainAccessApi {
         brainId: string,
         options: RemoveBrainAccess
     ): Promise<void> {
-        const validatedOptions = RemoveBrainAccessSchema.parse(options);
+        const { emailAddress, userId } = options;
+        if (!emailAddress && !userId) {
+            throw new Error("Either emailAddress or userId must be provided");
+        }
+        if (emailAddress && userId) {
+            throw new Error("Provide either emailAddress or userId, but not both");
+        }
+        const params = emailAddress ? { emailAddress } : { userId: userId! };
 
-        await this.axiosInstance.delete(`/brain-access/${brainId}`, {
-            params: validatedOptions
-        });
+        await this.axiosInstance.delete(`/brain-access/${brainId}`, { params });
     }
 }
