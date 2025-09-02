@@ -138,6 +138,21 @@ describe('SearchApi', () => {
             expect(params.getAll('excludeBrainIds')).toEqual(options.excludeBrainIds);
         });
 
+        it('serializes numeric array values correctly in the request URL', async () => {
+            const options = {
+                excludeBrainIds: [123, 456]
+            } as any;
+
+            mock.onGet('/search/public').reply(200, [mockSearchResult]);
+
+            await api.searchPublic(mockQueryText, options);
+
+            const config = mock.history.get[0];
+            const serialized = config.paramsSerializer.serialize(config.params);
+            const params = new URLSearchParams(serialized);
+            expect(params.getAll('excludeBrainIds')).toEqual(['123', '456']);
+        });
+
         it('should throw error on invalid parameters', async () => {
             const invalidOptions = {
                 excludeBrainIds: ['invalid-uuid']
