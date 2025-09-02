@@ -16,7 +16,7 @@ describe.skipIf(!process.env.THEBRAIN_API_KEY)('Search API E2E', () => {
         
         // Create a test brain for search testing
         const brain = await helper.createTestBrain('Test Brain Search E2E');
-        testBrainId = brain.id!;
+        testBrainId = brain.id;
         console.log('Created test brain for search testing:', testBrainId);
         
         // Create a test thought with searchable content

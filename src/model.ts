@@ -99,7 +99,7 @@ const BaseModificationModel = z.object({
 export const BrainDto = BaseEntitySchema.extend({
     name: z.string().nullable(),
     homeThoughtId: z.string().uuid(),
-}).partial();
+});
 
 export const BrainAccessorDto = z.object({
     accessorId: z.string().uuid(),

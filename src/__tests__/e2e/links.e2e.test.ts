@@ -17,7 +17,7 @@ describe.skipIf(!process.env.THEBRAIN_API_KEY)('Links API E2E', () => {
         
         // Create a test brain
         const brain = await helper.createTestBrain('Test Brain Links E2E');
-        testBrainId = brain.id!;
+        testBrainId = brain.id;
 
         // Create source thought
         const sourceThought = await api.thoughts.createThought(testBrainId, {
