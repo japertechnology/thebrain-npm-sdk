@@ -24,11 +24,11 @@ export class AttachmentsApi {
      * @param brainId Brain identifier containing the attachment.
      * @param attachmentId Identifier of the attachment to fetch.
      */
-    async getAttachmentContent(brainId: string, attachmentId: string): Promise<Blob> {
-        const response = await this.axiosInstance.get(`/attachments/${brainId}/${attachmentId}/file-content`, {
-            responseType: 'blob'
+    async getAttachmentContent(brainId: string, attachmentId: string): Promise<ArrayBuffer | Blob> {
+        const response = await this.axiosInstance.get<ArrayBuffer>(`/attachments/${brainId}/${attachmentId}/file-content`, {
+            responseType: 'arraybuffer'
         });
-        return response.data;
+        return response.data as ArrayBuffer | Blob;
     }
 
     /**
