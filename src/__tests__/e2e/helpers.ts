@@ -23,12 +23,10 @@ export class TestHelper {
             // First check if a brain with this name already exists
             const existingBrains = await this.api.brains.getBrains();
             const existingBrain = existingBrains.find(brain => brain.name === name);
-            
+
             if (existingBrain) {
                 console.log(`Found existing brain with name "${name}" (ID: ${existingBrain.id})`);
-                if (existingBrain.id) {
-                    this.testBrains.push(existingBrain);
-                }
+                this.testBrains.push(existingBrain);
                 return existingBrain;
             }
 
@@ -40,7 +38,7 @@ export class TestHelper {
             } else if (brains && typeof brains === 'object') {
                 brain = brains;
             }
-            if (!brain || !brain.id) {
+            if (!brain) {
                 throw new Error('Created brain has no ID');
             }
 
@@ -61,7 +59,6 @@ export class TestHelper {
     async cleanup(): Promise<void> {
         // Delete all test brains in reverse order to avoid potential dependency issues
         for (const brain of this.testBrains.reverse()) {
-            if (!brain.id) continue;
             try {
                 await this.api.brains.deleteBrain(brain.id);
                 console.log(`Successfully deleted test brain ${brain.id}`);
@@ -71,4 +68,4 @@ export class TestHelper {
         }
         this.testBrains = [];
     }
-} 
+}
